@@ -48,7 +48,8 @@ public class AuthServer implements AuthInterface{
             e.printStackTrace();
         }
     }
-
+    
+    @Override
     public void registerUser(User u){
         users = getUsers();
         users.put(u.getCpf(), u);
@@ -57,6 +58,7 @@ public class AuthServer implements AuthInterface{
         System.out.println("The User was registered successfully");
     }
     
+    @Override
     public User loginUser(String cpf, String password){
         for(Entry<String, User> user : users.entrySet()){
             if(cpf.equals(user.getKey()) && password.equals(user.getValue().getPassword())){
