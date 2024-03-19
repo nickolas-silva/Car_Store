@@ -8,14 +8,17 @@ public class Car implements Serializable{
     private String renavam;
     private Integer year;
     private Double price;
+    private String category;
 
-    public Car(String model, String renavam, Integer year, Double price) {
+    public Car(String model, String renavam, Integer year, Double price, String category) {
         this.model = model;
         this.renavam = renavam;
         this.year = year;
         this.price = price;
+        this.category = category;
         
     }
+    
 
     public String getModel() {
         return model;
@@ -49,10 +52,12 @@ public class Car implements Serializable{
         this.price = price;
     }
 
-    public void update(Car car){
-        this.model = car.getModel();
-        this.renavam = car.getRenavam();
-        this.year = car.getYear();
-        this.price = car.getPrice();
+    public String getCategory() {
+        return category;
+    }
+
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

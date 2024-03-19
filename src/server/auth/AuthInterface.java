@@ -7,6 +7,6 @@ import model.User;
 
 public interface AuthInterface extends Remote {
     
-    User login(String cpf, String password) throws RemoteException;
+    User loginUser(String cpf, String password) throws RemoteException;
     void registerUser(User u) throws RemoteException;
 }

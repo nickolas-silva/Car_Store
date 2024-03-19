@@ -3,7 +3,10 @@ package model;
 public class Client extends User{
     
     public Client(String name, String cpf, String password) {
-        super();
+        super.setCpf(cpf);
+        super.setName(name);;
+        super.setPassword(password);;
+
     }
     
 }

@@ -3,7 +3,9 @@ package model;
 public class Employee extends User{
     
     public Employee(String name, String cpf, String password) {
-        super();
+        super.setCpf(cpf);
+        super.setName(name);;
+        super.setPassword(password);;
     }
     
     public Car addCar(Car newCar){

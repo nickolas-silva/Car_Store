@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.rmi.AlreadyBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,8 +15,8 @@ import java.util.Map.Entry;
 
 import model.User;
 
-public class AuthServer {
-    private static String path = "src/server/users.txt";
+public class AuthServer implements AuthInterface{
+    private static String path = "src/server/auth/users.txt";
     private static HashMap<String, User> users;
     private static ObjectInputStream input;
     private static ObjectOutputStream output;
@@ -57,7 +56,7 @@ public class AuthServer {
 
         System.out.println("The User was registered successfully");
     }
-
+    
     public User loginUser(String cpf, String password){
         for(Entry<String, User> user : users.entrySet()){
             if(cpf.equals(user.getKey()) && password.equals(user.getValue().getPassword())){
@@ -93,7 +92,7 @@ public class AuthServer {
         AuthServer auth = new AuthServer();
 
         try{
-            AuthInterface stub = (AuthInterface) UnicastRemoteObject.exportObject((Remote) auth, 0);
+            AuthInterface stub = (AuthInterface) UnicastRemoteObject.exportObject(auth, 0);
             LocateRegistry.createRegistry(3031);
             Registry registry = LocateRegistry.getRegistry(3031);
             registry.bind("Authentication", stub);
