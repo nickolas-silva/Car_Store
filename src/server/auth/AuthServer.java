@@ -97,7 +97,7 @@ public class AuthServer implements AuthInterface{
             AuthInterface stub = (AuthInterface) UnicastRemoteObject.exportObject(auth, 0);
             LocateRegistry.createRegistry(3031);
             Registry registry = LocateRegistry.getRegistry(3031);
-            registry.bind("Authentication", stub);
+            registry.bind("localhost", stub);
 
             System.out.println("Auth Server is running...");
         } catch (RemoteException | AlreadyBoundException e){

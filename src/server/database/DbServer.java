@@ -210,21 +210,6 @@ public class DbServer implements DbInterface{
         return searched;    
     }
 
-    public static void main(String[] args) {
-        DbServer db = new DbServer();
-
-        try{
-            DbInterface server = (DbInterface) UnicastRemoteObject.exportObject(db, 0);
-            LocateRegistry.createRegistry(3032);
-            Registry registry = LocateRegistry.getRegistry("127.0.0.2", 3032);
-            registry.rebind("Database", server);
-
-            System.out.println("The Database Server is running");
-        } catch (RemoteException | AlreadyBoundException e){
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public List<Car> listCars() {
         mapCars = getCars();
@@ -257,4 +242,18 @@ public class DbServer implements DbInterface{
         return cars;
     }
 
+    public static void main(String[] args) {
+        DbServer db = new DbServer();
+
+        try {
+            DbInterface server = (DbInterface) UnicastRemoteObject.exportObject(db, 0);
+            LocateRegistry.createRegistry(3032);
+            Registry registry = LocateRegistry.getRegistry("127.0.0.2", 3032);
+            registry.rebind("database", server);
+
+            System.out.println("The Database Server is running");
+        } catch (RemoteException | AlreadyBoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
