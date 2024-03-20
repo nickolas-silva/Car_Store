@@ -108,7 +108,7 @@ public class GatewayServer implements GatewayInterface{
 
             LocateRegistry.createRegistry(3030);
             registry = LocateRegistry.getRegistry(3030);
-            registry.bind("Gateway", p);
+            registry.bind("gateway", p);
 
             System.out.println("GatewayServer is running...");
 
