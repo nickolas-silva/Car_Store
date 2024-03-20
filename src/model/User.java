@@ -6,6 +6,7 @@ public class User  implements Serializable{
     private String name;
     private String cpf;
     private String password;
+    public boolean isEmployee;
 
     public String getPassword() {
         return password;

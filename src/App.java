@@ -22,7 +22,7 @@ public class App {
     private static GatewayInterface gateway;
     private static List<Car> listCars = new ArrayList<Car>();
     private static User user;
-    private static boolean isClient = false;
+    //private static boolean isClient = false;
 
     public static void main(String[] args) throws Exception {
         
@@ -63,6 +63,7 @@ public class App {
 
         while (!connection) {
             
+            if(user.isEmployee){
             System.out.println("""
                 CAR STORE
                 ----------------------------
@@ -82,21 +83,15 @@ public class App {
 
             switch (option) {
                 case 1:
-                    if (!isClient) {
-                        addCar();
-                    }
+                    addCar();
                     break;
 
                 case 2:
-                    if (!isClient) {
-                        editCar();
-                    }
+                    editCar();
                     break;
 
                 case 3:
-                    if (!isClient) {
-                        deleteCar();
-                    }
+                    deleteCar();
                     break;
 
                 case 4:
@@ -211,6 +206,131 @@ public class App {
                 default:
                     break;
             }
+        } else{
+            System.out.println("""
+                CAR STORE
+                ----------------------------
+                1 - LIST CARS
+                2 - SEARCH CAR
+                3 - BUY CAR
+                4 - AMOUNT OF CARS
+                5 - LOGOUT
+                ----------------------------
+            """);
+            int option = in.nextInt();
+            in.nextLine();
+            new ProcessBuilder("clear").inheritIO().start().waitFor();
+
+            switch (option) {
+                case 1:
+                    System.out.println("LIST OF CARS");
+                    System.out.println("-------------------------------------------------");
+                    System.out.println("""
+                            1 - Economic
+                            2 - Executive
+                            3 - Intermediary
+                            4 - All
+                            """);
+                    int op = in.nextInt();
+                    in.nextLine();
+                    List<Car> list = new ArrayList<Car>();
+
+                    if (op == 1) {
+                        list = gateway.listCarsbyCategory("Economic");
+                    } else if (op == 2) {
+                        list = gateway.listCarsbyCategory("Executive");
+                    } else if (op == 3) {
+                        list = gateway.listCarsbyCategory("Intermediary");
+                    } else if (op == 4) {
+                        list = gateway.listCars();
+                    } else {
+                        System.out.println("Invalid option");    
+                    }
+
+                    for (Car car : list) {
+                        System.out.println("-------------------------------------------------");
+                        System.out.println("Model: " + car.getModel());
+                        System.out.println("Renavam: " + car.getRenavam());
+                        System.out.println("Year: " + car.getYear());
+                        System.out.println("Price: " + car.getPrice());
+                        System.out.println("Category: " + car.getCategory());
+                        System.out.println("-------------------------------------------------");
+                    }
+                    break;
+
+                case 2:
+                    System.out.println("""
+                        SEARCH CAR
+                        ----------------------------
+                        1 - By name
+                        2 - By renavam
+                    """);
+                    int op2 = in.nextInt();
+                    in.nextLine();
+                    if (op2 == 1) {
+                        System.out.println("Enter the name: ");
+                        String name = in.nextLine();
+                        List<Car> list2 = gateway.getCarbyName(name);
+                        for (Car car : list2) {
+                            System.out.println("Model: " + car.getModel());
+                            System.out.println("Renavam: " + car.getRenavam());
+                            System.out.println("Year: " + car.getYear());
+                            System.out.println("Price: " + car.getPrice());
+                            System.out.println("Category: " + car.getCategory());
+                            System.out.println("-------------------------------------------------");
+                        }
+                    } else if (op2 == 2) {
+                        System.out.println("Enter the renavam: ");
+                        String renavam = in.nextLine();
+                        Car car = gateway.getCar(renavam);
+                        if (car != null) {
+                            System.out.println("Model: " + car.getModel());
+                            System.out.println("Year: " + car.getYear());
+                            System.out.println("Price: " + car.getPrice());
+                            System.out.println("Category: " + car.getCategory());
+                            System.out.println("-------------------------------------------------");
+                        } else {
+                            System.out.println("Car not found");
+                        }
+                    }
+                    break;
+
+                case 3:
+                    buyCar();
+                    break;
+                
+                case 4:
+                    System.out.println("AMOUNT OF CARS");
+                    System.out.println("-------------------------------------------------");
+                    System.out.println("1 - Economic");
+                    System.out.println("2 - Executive");
+                    System.out.println("3 - Intermediary");
+                    System.out.println("4 - All");
+                    int op3 = in.nextInt();
+                    in.nextLine();
+
+                    if (op3 == 1) {
+                        System.out.println("Economic: " + gateway.getQnt("Economic"));
+                    } else if (op3 == 2) {
+                        System.out.println("Executive: " + gateway.getQnt("Executive"));
+                    } else if (op3 == 3) {
+                        System.out.println("Intermediary: " + gateway.getQnt("Intermediary"));
+                    } else if (op3 == 4) {
+                        System.out.println("Economic: " + gateway.getQnt("Economic"));
+                        System.out.println("Executive: " + gateway.getQnt("Executive"));
+                        System.out.println("Intermediary: " + gateway.getQnt("Intermediary"));
+                    } else {
+                        System.out.println("Invalid option");
+                    }
+                    break;
+
+                case 5:
+                    System.out.println("LOGOUT");
+                    connection = true;
+                    break;
+
+                }
+        }
 
         }
 
@@ -239,7 +359,7 @@ public class App {
         if(option == 1){
             Client newC = new Client(name, cpf, password);
             gateway.registerUser(newC);
-            isClient = true;
+            //isClient = true;
             
         } else if(option == 2){
             Employee newE = new Employee(name, cpf, password);

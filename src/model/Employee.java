@@ -4,8 +4,9 @@ public class Employee extends User{
     
     public Employee(String name, String cpf, String password) {
         super.setCpf(cpf);
-        super.setName(name);;
-        super.setPassword(password);;
+        super.setName(name);
+        super.setPassword(password);
+        super.isEmployee = true;
     }
     
     public Car addCar(Car newCar){
