@@ -89,13 +89,12 @@ public class DbServer implements DbInterface{
                 
                 if(car.getValue().getCategory().equals("Economic")){
                     qntEco++;
-                    break;
+                    
                 } else if (car.getValue().getCategory().equals("Executive")){
                     qntExe++;
-                    break;
+                    
                 } else if (car.getValue().getCategory().equals("Intermediary")){
                     qntInter++;
-                    break;
                 }
 
             }
@@ -118,12 +117,8 @@ public class DbServer implements DbInterface{
         } else if (category.equals("Intermediary")){
             InterCar.setQnt(qntInter);
             return qntInter;
-        } else {
-            EcoCar.setQnt(qntEco);
-            ExeCar.setQnt(qntExe);
-            InterCar.setQnt(qntInter);
-            return qntEco + qntExe + qntInter;
         }
+        return 0;
     }
 
     @Override

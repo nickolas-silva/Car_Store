@@ -10,6 +10,8 @@ import model.Car;
 import model.Client;
 import model.EcoCar;
 import model.Employee;
+import model.ExeCar;
+import model.InterCar;
 import model.User;
 import server.gateway.GatewayInterface;
 
@@ -27,7 +29,8 @@ public class App {
     try{
         Registry authR = LocateRegistry.getRegistry(3030);
         gateway = (GatewayInterface) authR.lookup("gateway");
-
+        
+        addDefaultCars();
         connection = true;
         while (connection) {
             System.out.println("""
@@ -46,7 +49,9 @@ public class App {
                 user = login();
                 if(user != null){
                     connection = false;
+                    break;
                 }
+                System.out.println("Invalid user");
                 break;
             } else if(option == 2){
                 register();
@@ -57,21 +62,23 @@ public class App {
         }
 
         while (!connection) {
+            
             System.out.println("""
-                    CAR STORE
-                    ----------------------------
-                    1 - ADD CAR
-                    2 - EDIT CAR
-                    3 - DELETE CAR
-                    4 - LIST CARS
-                    5 - SEARCH CAR
-                    6 - BUY CAR
-                    7 - AMOUNT OF CARS
-                    8 - LOGOUT
-                    ----------------------------
+                CAR STORE
+                ----------------------------
+                1 - ADD CAR
+                2 - EDIT CAR
+                3 - DELETE CAR
+                4 - LIST CARS
+                5 - SEARCH CAR
+                6 - BUY CAR
+                7 - AMOUNT OF CARS
+                8 - LOGOUT
+                ----------------------------
             """);
             int option = in.nextInt();
             in.nextLine();
+            new ProcessBuilder("clear").inheritIO().start().waitFor();
 
             switch (option) {
                 case 1:
@@ -79,16 +86,19 @@ public class App {
                         addCar();
                     }
                     break;
+
                 case 2:
                     if (!isClient) {
                         editCar();
                     }
                     break;
+
                 case 3:
                     if (!isClient) {
                         deleteCar();
                     }
                     break;
+
                 case 4:
                     System.out.println("LIST OF CARS");
                     System.out.println("-------------------------------------------------");
@@ -115,6 +125,7 @@ public class App {
                     }
 
                     for (Car car : list) {
+                        System.out.println("-------------------------------------------------");
                         System.out.println("Model: " + car.getModel());
                         System.out.println("Renavam: " + car.getRenavam());
                         System.out.println("Year: " + car.getYear());
@@ -122,14 +133,15 @@ public class App {
                         System.out.println("Category: " + car.getCategory());
                         System.out.println("-------------------------------------------------");
                     }
+                    break;
 
                 case 5:
                     System.out.println("""
-                            SEARCH CAR
-                            ----------------------------
-                            1 - By name
-                            2 - By renavam
-                            """);
+                        SEARCH CAR
+                        ----------------------------
+                        1 - By name
+                        2 - By renavam
+                    """);
                     int op2 = in.nextInt();
                     in.nextLine();
                     if (op2 == 1) {
@@ -194,8 +206,7 @@ public class App {
                 case 8:
                 System.out.println("LOGOUT");
                 connection = true;
-
-
+                break;
             
                 default:
                     break;
@@ -283,12 +294,12 @@ public class App {
                 System.out.println("Economic Car added successfully");
                 break;
             case 2:
-                Car exe = new Car(model, renavam, year, price, "Executive");
+                ExeCar exe = new ExeCar(model, renavam, year, price, "Executive");
                 gateway.addCar(exe);
                 System.out.println("Executive Car added successfully");
                 break;
             case 3:
-                Car inter = new Car(model, renavam, year, price, "Intermediary");
+                InterCar inter = new InterCar(model, renavam, year, price, "Intermediary");
                 gateway.addCar(inter);
                 System.out.println("Intermediary Car added successfully");
                 break;
@@ -389,6 +400,21 @@ public class App {
         gateway.deleteCar(renavam);
         System.out.println("Car with renavam: " + renavam + "deleted successfully");
 
+    }
+
+    private static void addDefaultCars() throws RemoteException{
+        gateway.addCar(new EcoCar("Kwid", "20202020", 2021,  (double) 30000, "Economic"));
+        gateway.addCar(new EcoCar("Uno", "20202021", 2012,  (double) 15000, "Economic"));
+        gateway.addCar(new EcoCar("Corsa", "20202022", 2011,  (double) 45000, "Economic"));
+        gateway.addCar(new ExeCar("Creta", "20202023", 2015,  (double) 80000, "Executive"));
+        gateway.addCar(new ExeCar("Prisma", "20202024", 2022,  (double) 100000, "Executive"));
+        gateway.addCar(new ExeCar("Civic", "20202025", 2023,  (double) 56000, "Executive"));
+        gateway.addCar(new InterCar("Duster", "20202026", 2024,  (double) 30000, "Intermediary"));
+        gateway.addCar(new InterCar("Onix", "20202027", 2016,  (double) 20000, "Intermediary"));
+        gateway.addCar(new InterCar("Gol", "20202028", 2018,  (double) 50000, "Intermediary"));
+        gateway.addCar(new EcoCar("Fusca", "20202029", 2019,  (double) 55000, "Economic"));
+        gateway.addCar(new ExeCar("Golf GTI", "20202030", 2020,  (double) 150000, "Executive"));
+        gateway.addCar(new InterCar("Spin", "20202031", 2014,  (double) 60000, "Intermediary"));
     }
 
 }
